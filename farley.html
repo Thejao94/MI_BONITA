@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Farley 💖</title>
+
+<style>
+body {
+    font-family: 'Georgia', serif;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
+
+.poems {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    font-size: 18px;
+    color: rgba(255,255,255,0.35);
+    transform: rotate(-15deg);
+    pointer-events: none;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    width: 360px;
+    z-index: 2;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+#open {
+    background: #aaa;
+    color: white;
+    cursor: not-allowed;
+}
+
+#yes { background:#38b000; color:white; }
+#no { background:#e63946; color:white; position:absolute; }
+
+#message {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #38b000;
+    display: none;
+}
+
+#question { display: none; position: relative; }
+
+#countdown {
+    margin: 20px 0;
+    font-size: 20px;
+}
+
+/* MODAL POEMA */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity:0; transform: scale(0.9); }
+    to { opacity:1; transform: scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="poems">
+Te elijo incluso cuando no lo sabes 💖  
+Tu sonrisa es mi lugar favorito  
+Desde que llegaste, todo es un poco más bonito  
+</div>
+
+<div class="card">
+    <h1>Para Farley 💕</h1>
+
+    <!-- BLOQUEO -->
+    <div id="lock">
+        <p>Este mensaje solo se abre en fin de año 🎆</p>
+        <div id="countdown"></div>
+        <button id="open" disabled>Abrir</button>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div id="question">
+        <p>¿Quieres ser mi novia?</p>
+        <button id="yes">Sí</button>
+        <button id="no">No</button>
+        <div id="message">💖 Sabía que dirías que sí 💖</div>
+    </div>
+</div>
+
+<!-- MODAL POEMA -->
+<div class="modal" id="poemModal">
+    <div class="modal-content">
+        <h2>Para ti, Farley 💌</h2>
+        <p>
+            No llegaste a mi vida por casualidad,<br>
+            llegaste para quedarte.<br><br>
+
+            En cada risa tuya encontré hogar,<br>
+            en cada silencio, paz.<br><br>
+
+            Si este año empieza contigo,<br>
+            quiero que todos los demás también lo hagan.<br><br>
+
+            Hoy no te prometo perfección,<br>
+            solo un amor sincero…<br>
+            y elegirte todos los días.
+        </p>
+    </div>
+</div>
+
+<script>
+/* ⏰ TEMPORIZADOR */
+const year = new Date().getFullYear();
+const start = new Date(year, 11, 31, 23, 59, 0); // 31 dic 23:59
+const end = new Date(year + 1, 0, 1, 7, 0, 0);  // 1 ene 07:00
+
+const countdown = document.getElementById("countdown");
+const openBtn = document.getElementById("open");
+const lock = document.getElementById("lock");
+const question = document.getElementById("question");
+
+function updateTimer() {
+    const now = new Date();
+
+    if (now >= start && now <= end) {
+        countdown.innerHTML = "🎉 ¡Feliz Año Nuevo! 🎉";
+        openBtn.disabled = false;
+        openBtn.style.background = "#38b000";
+        openBtn.style.cursor = "pointer";
+        return;
+    }
+
+    if (now < start) {
+        const diff = start - now;
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff / (1000*60*60)) % 24);
+        const m = Math.floor((diff / (1000*60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        countdown.innerHTML = `Se abre en: ${d}d ${h}h ${m}m ${s}s`;
+    } else {
+        countdown.innerHTML = "⏰ El tiempo ha terminado";
+    }
+}
+
+setInterval(updateTimer, 1000);
+updateTimer();
+
+openBtn.onclick = () => {
+    lock.style.display = "none";
+    question.style.display = "block";
+};
+
+/* 💖 BOTONES */
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const message = document.getElementById("message");
+const modal = document.getElementById("poemModal");
+
+// 👉 CANCIÓN DE YOUTUBE
+const youtubeURL = "https://www.youtube.com/watch?v=ESsXImCdiMM";
+
+noBtn.style.left = "200px";
+noBtn.style.top = "80px";
+
+noBtn.onmouseenter = () => {
+    noBtn.style.left = Math.random() * 200 + "px";
+    noBtn.style.top = Math.random() * 120 + "px";
+};
+
+yesBtn.onclick = () => {
+    message.style.display = "block";
+
+    setTimeout(() => {
+        modal.style.display = "flex";
+
+        setTimeout(() => {
+            window.location.href = youtubeURL;
+        }, 20000);
+
+    }, 5000);
+};
+</script>
+
+</body>
+</html>
