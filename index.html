@@ -16,40 +16,16 @@ body {
     justify-content: center;
     align-items: center;
     background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    overflow-x: hidden;
     padding: 15px;
-}
-
-.poems {
-    position: fixed;
-    inset: 0;
-    font-size: 14px;
-    color: rgba(255,255,255,0.35);
-    transform: rotate(-12deg);
-    pointer-events: none;
-    text-align: center;
-    padding: 20px;
 }
 
 .card {
     background: white;
     padding: 25px;
     border-radius: 18px;
-    text-align: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
     width: 100%;
     max-width: 380px;
-    z-index: 2;
-}
-
-h1 {
-    font-size: 1.6rem;
-    margin-bottom: 10px;
-}
-
-p {
-    font-size: 1rem;
-    line-height: 1.5;
+    text-align: center;
 }
 
 button {
@@ -61,93 +37,62 @@ button {
     margin-top: 12px;
 }
 
-#open {
-    background: #aaa;
-    color: white;
-}
-
-#yes {
-    background: #38b000;
-    color: white;
-}
-
-#no {
-    background: #e63946;
-    color: white;
-    position: relative;
-}
-
-#countdown {
-    margin: 15px 0;
-    font-size: 1rem;
-}
+#yes { background:#38b000; color:white; }
+#no { background:#e63946; color:white; }
 
 #message {
-    margin-top: 15px;
-    font-size: 1.05rem;
-    color: #38b000;
     display: none;
+    margin-top: 15px;
+    color: #38b000;
 }
 
-#question { display: none; }
-
+/* MODAL */
 .modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.75);
     display: none;
     justify-content: center;
     align-items: center;
     padding: 15px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
 }
 
 .modal-content {
     background: white;
-    border-radius: 18px;
     padding: 20px;
+    border-radius: 18px;
+    max-width: 420px;
+    width: 100%;
     max-height: 80vh;
     overflow-y: auto;
-    width: 100%;
-    max-width: 420px;
-}
-
-.modal-content h2 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="poems">
-Te elijo incluso cuando no lo sabes 💖  
-Tu sonrisa es mi lugar favorito  
-Desde que llegaste, todo es un poco más bonito  
-</div>
-
 <div class="card">
     <h1>Para: Farley 💕</h1>
-
-    <div id="lock">
-        <p>Este mensaje está disponible por tiempo limitado ⏳</p>
-        <div id="countdown"></div>
-        <button id="open" disabled>Abrir</button>
-    </div>
 
     <div id="question">
         <p>¿Quieres ser mi novia?</p>
         <button id="yes">Sí 💖</button>
         <button id="no">No 🙈</button>
-        <div id="message">
-            💖 Gracias por darme esta oportunidad… espera un momento 💖
-        </div>
+        <div id="message">💖 Gracias por decir que sí… espera un momento 💖</div>
     </div>
 </div>
 
 <div class="modal" id="poemModal">
     <div class="modal-content">
-        <h2>Para ti, Farley 💌</h2>
+        <h2>Para ti 💌</h2>
         <p>
             No llegaste a mi vida por casualidad,<br>
             llegaste para quedarte.<br><br>
@@ -155,72 +100,24 @@ Desde que llegaste, todo es un poco más bonito
             En cada risa tuya encontré hogar,<br>
             en cada silencio, paz.<br><br>
 
-            Hoy no te prometo perfección,<br>
-            solo un amor sincero…<br>
-            y elegirte todos los días.
+            Elegirte hoy,<br>
+            mañana y siempre.
         </p>
     </div>
 </div>
 
 <script>
-/* ⏰ HORARIO ECUADOR */
-const nowLocal = new Date();
-const ecuadorOffset = -5 * 60;
-const localOffset = nowLocal.getTimezoneOffset();
-const diffMs = (ecuadorOffset + localOffset) * 60 * 1000;
-
-const nowEc = new Date(nowLocal.getTime() + diffMs);
-const start = new Date(nowEc);
-const end = new Date(nowEc);
-end.setDate(end.getDate() + 1);
-end.setHours(10, 0, 0, 0);
-
-const countdown = document.getElementById("countdown");
-const openBtn = document.getElementById("open");
-
-function updateTimer() {
-    const now = new Date();
-    const ec = new Date(now.getTime() + diffMs);
-
-    if (ec <= end) {
-        const r = end - ec;
-        const h = Math.floor(r / 3600000);
-        const m = Math.floor((r % 3600000) / 60000);
-        const s = Math.floor((r % 60000) / 1000);
-        countdown.textContent = `Disponible por: ${h}h ${m}m ${s}s`;
-        openBtn.disabled = false;
-        openBtn.style.background = "#38b000";
-    } else {
-        countdown.textContent = "⏰ El tiempo ha terminado";
-        openBtn.disabled = true;
-    }
-}
-
-setInterval(updateTimer, 1000);
-updateTimer();
-
-openBtn.onclick = () => {
-    document.getElementById("lock").style.display = "none";
-    document.getElementById("question").style.display = "block";
-};
-
-/* BOTÓN NO (MÓVIL SAFE) */
-const noBtn = document.getElementById("no");
-noBtn.addEventListener("touchstart", moveNo);
-noBtn.addEventListener("mouseenter", moveNo);
-
-function moveNo() {
-    noBtn.style.transform = `translate(${Math.random()*80 - 40}px, ${Math.random()*40 - 20}px)`;
-}
-
-/* BOTÓN SÍ */
 document.getElementById("yes").onclick = () => {
     document.getElementById("message").style.display = "block";
+
     setTimeout(() => {
-        document.getElementById("poemModal").style.display = "flex";
+        const modal = document.getElementById("poemModal");
+        modal.classList.add("show");
+
         setTimeout(() => {
             window.location.href = "https://www.youtube.com/watch?v=ESsXImCdiMM";
         }, 20000);
+
     }, 5000);
 };
 </script>
