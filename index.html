@@ -155,10 +155,20 @@ Desde que llegaste, todo es un poco más bonito
 const start = new Date(year, 1, 0, 1, 0, 0); // 31 dic 23:59
 const end = new Date(year + 1, 0, 1, 10, 0, 0);  // 1 ene 07:00*/
 
-const year = new Date().getFullYear();
-const start = new Date(year, 1, 0, 1, 0, 0); // 31 dic 23:59
-const end = new Date(year + 1, 0, 1, 10, 0, 0);  // 1 ene 07:00
+const now = new Date();
 
+// Ajuste a UTC-5 (Ecuador)
+const ecuadorOffset = -5 * 60; // minutos
+const localOffset = now.getTimezoneOffset(); // minutos del navegador
+const diff = (ecuadorOffset + localOffset) * 60 * 1000;
+
+// Fecha actual en Ecuador
+const start = new Date(now.getTime() + diff);
+
+// Fecha fin: mañana a las 10:00 AM (Ecuador)
+const end = new Date(start);
+end.setDate(end.getDate() + 1);
+end.setHours(10, 0, 0, 0);
 
 const countdown = document.getElementById("countdown");
 const openBtn = document.getElementById("open");
