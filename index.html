@@ -2,99 +2,118 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Para: Farley 💖</title>
 
 <style>
+* { box-sizing: border-box; }
+
 body {
     font-family: 'Georgia', serif;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
     background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    overflow-x: hidden;
+    padding: 15px;
 }
 
 .poems {
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    top: -50%;
-    left: -50%;
-    font-size: 18px;
+    position: fixed;
+    inset: 0;
+    font-size: 14px;
     color: rgba(255,255,255,0.35);
-    transform: rotate(-15deg);
+    transform: rotate(-12deg);
     pointer-events: none;
-    white-space: pre-wrap;
     text-align: center;
+    padding: 20px;
 }
 
 .card {
     background: white;
-    padding: 40px;
-    border-radius: 20px;
+    padding: 25px;
+    border-radius: 18px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-    width: 360px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    width: 100%;
+    max-width: 380px;
     z-index: 2;
 }
 
+h1 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
 button {
-    padding: 12px 25px;
-    font-size: 16px;
-    border-radius: 10px;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    border-radius: 12px;
     border: none;
-    cursor: pointer;
+    margin-top: 12px;
 }
 
 #open {
     background: #aaa;
     color: white;
-    cursor: not-allowed;
 }
 
-#yes { background:#38b000; color:white; }
-#no { background:#e63946; color:white; position:absolute; }
+#yes {
+    background: #38b000;
+    color: white;
+}
+
+#no {
+    background: #e63946;
+    color: white;
+    position: relative;
+}
+
+#countdown {
+    margin: 15px 0;
+    font-size: 1rem;
+}
 
 #message {
-    margin-top: 20px;
-    font-size: 20px;
+    margin-top: 15px;
+    font-size: 1.05rem;
     color: #38b000;
     display: none;
 }
 
-#question { display: none; position: relative; }
+#question { display: none; }
 
-#countdown {
-    margin: 20px 0;
-    font-size: 20px;
-}
-
-/* MODAL POEMA */
 .modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.7);
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    padding: 15px;
 }
 
 .modal-content {
     background: white;
-    padding: 30px;
-    border-radius: 20px;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
-    animation: fadeIn 1s ease;
+    border-radius: 18px;
+    padding: 20px;
+    max-height: 80vh;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 420px;
 }
 
-@keyframes fadeIn {
-    from { opacity:0; transform: scale(0.9); }
-    to { opacity:1; transform: scale(1); }
+.modal-content h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
 }
 </style>
 </head>
@@ -108,25 +127,24 @@ Desde que llegaste, todo es un poco más bonito
 </div>
 
 <div class="card">
-    <h1>Para: Farley💕</h1>
+    <h1>Para: Farley 💕</h1>
 
-    <!-- BLOQUEO -->
     <div id="lock">
-        <p>Este mensaje solo se abre en fin de año 🎆</p>
+        <p>Este mensaje está disponible por tiempo limitado ⏳</p>
         <div id="countdown"></div>
         <button id="open" disabled>Abrir</button>
     </div>
 
-    <!-- CONTENIDO -->
     <div id="question">
         <p>¿Quieres ser mi novia?</p>
-        <button id="yes">Sí</button>
-        <button id="no">No</button>
-        <div id="message">💖 Me hace muy feliz que me des la oportunidad de caminar juntos... no me cierres espera un momento 💖</div>
+        <button id="yes">Sí 💖</button>
+        <button id="no">No 🙈</button>
+        <div id="message">
+            💖 Gracias por darme esta oportunidad… espera un momento 💖
+        </div>
     </div>
 </div>
 
-<!-- MODAL POEMA -->
 <div class="modal" id="poemModal">
     <div class="modal-content">
         <h2>Para ti, Farley 💌</h2>
@@ -137,64 +155,44 @@ Desde que llegaste, todo es un poco más bonito
             En cada risa tuya encontré hogar,<br>
             en cada silencio, paz.<br><br>
 
-            Si este año empieza contigo,<br>
-            quiero que todos los demás también lo hagan.<br><br>
-
             Hoy no te prometo perfección,<br>
             solo un amor sincero…<br>
-            y elegirte todos los días.<br><br>
-
-            ⏳ Aun no cierres todavia falta algo....
+            y elegirte todos los días.
         </p>
     </div>
 </div>
 
 <script>
-/* ⏰ TEMPORIZADOR */
-/*const year = new Date().getFullYear();
-const start = new Date(year, 1, 0, 1, 0, 0); // 31 dic 23:59
-const end = new Date(year + 1, 0, 1, 10, 0, 0);  // 1 ene 07:00*/
+/* ⏰ HORARIO ECUADOR */
+const nowLocal = new Date();
+const ecuadorOffset = -5 * 60;
+const localOffset = nowLocal.getTimezoneOffset();
+const diffMs = (ecuadorOffset + localOffset) * 60 * 1000;
 
-const now = new Date();
-
-// Ajuste a UTC-5 (Ecuador)
-const ecuadorOffset = -5 * 60; // minutos
-const localOffset = now.getTimezoneOffset(); // minutos del navegador
-const diff = (ecuadorOffset + localOffset) * 60 * 1000;
-
-// Fecha actual en Ecuador
-const start = new Date(now.getTime() + diff);
-
-// Fecha fin: mañana a las 10:00 AM (Ecuador)
-const end = new Date(start);
+const nowEc = new Date(nowLocal.getTime() + diffMs);
+const start = new Date(nowEc);
+const end = new Date(nowEc);
 end.setDate(end.getDate() + 1);
 end.setHours(10, 0, 0, 0);
 
 const countdown = document.getElementById("countdown");
 const openBtn = document.getElementById("open");
-const lock = document.getElementById("lock");
-const question = document.getElementById("question");
 
 function updateTimer() {
     const now = new Date();
+    const ec = new Date(now.getTime() + diffMs);
 
-    if (now >= start && now <= end) {
-        countdown.innerHTML = "🎉 ¡Feliz Año Nuevo! 🎉";
+    if (ec <= end) {
+        const r = end - ec;
+        const h = Math.floor(r / 3600000);
+        const m = Math.floor((r % 3600000) / 60000);
+        const s = Math.floor((r % 60000) / 1000);
+        countdown.textContent = `Disponible por: ${h}h ${m}m ${s}s`;
         openBtn.disabled = false;
         openBtn.style.background = "#38b000";
-        openBtn.style.cursor = "pointer";
-        return;
-    }
-
-    if (now < start) {
-        const diff = start - now;
-        const d = Math.floor(diff / (1000*60*60*24));
-        const h = Math.floor((diff / (1000*60*60)) % 24);
-        const m = Math.floor((diff / (1000*60)) % 60);
-        const s = Math.floor((diff / 1000) % 60);
-        countdown.innerHTML = `Se abre en: ${d}d ${h}h ${m}m ${s}s`;
     } else {
-        countdown.innerHTML = "⏰ El tiempo ha terminado";
+        countdown.textContent = "⏰ El tiempo ha terminado";
+        openBtn.disabled = true;
     }
 }
 
@@ -202,51 +200,30 @@ setInterval(updateTimer, 1000);
 updateTimer();
 
 openBtn.onclick = () => {
-    lock.style.display = "none";
-    question.style.display = "block";
+    document.getElementById("lock").style.display = "none";
+    document.getElementById("question").style.display = "block";
 };
 
-/* 💖 BOTONES */
+/* BOTÓN NO (MÓVIL SAFE) */
 const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
-const message = document.getElementById("message");
-const modal = document.getElementById("poemModal");
+noBtn.addEventListener("touchstart", moveNo);
+noBtn.addEventListener("mouseenter", moveNo);
 
-// 👉 CANCIÓN DE YOUTUBE
-const youtubeURL = "https://www.youtube.com/watch?v=ESsXImCdiMM";
+function moveNo() {
+    noBtn.style.transform = `translate(${Math.random()*80 - 40}px, ${Math.random()*40 - 20}px)`;
+}
 
-noBtn.style.left = "200px";
-noBtn.style.top = "80px";
-
-noBtn.onmouseenter = () => {
-    noBtn.style.left = Math.random() * 200 + "px";
-    noBtn.style.top = Math.random() * 120 + "px";
-};
-
-yesBtn.onclick = () => {
-    message.style.display = "block";
-
+/* BOTÓN SÍ */
+document.getElementById("yes").onclick = () => {
+    document.getElementById("message").style.display = "block";
     setTimeout(() => {
-        modal.style.display = "flex";
-
+        document.getElementById("poemModal").style.display = "flex";
         setTimeout(() => {
-            window.location.href = youtubeURL;
+            window.location.href = "https://www.youtube.com/watch?v=ESsXImCdiMM";
         }, 20000);
-
     }, 5000);
 };
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
